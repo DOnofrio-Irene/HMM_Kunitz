@@ -1,0 +1,51 @@
+# hmmsearch :: search profile(s) against a sequence database
+# HMMER 3.3.2 (Nov 2020); http://hmmer.org/
+# Copyright (C) 2020 Howard Hughes Medical Institute.
+# Freely distributed under the BSD open source license.
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# query HMM file:                  kunitz.hmm
+# target sequence database:        O62247.fasta
+# output directed to file:         O62247.out
+# Max sensitivity mode:            on [all heuristic filters off]
+# sequence search space set to:    569482
+# number of worker threads:        4
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+Query:       seeds_MSA  [M=58]
+Scores for complete sequences (score includes all domains):
+   --- full sequence ---   --- best 1 domain ---    -#dom-
+    E-value  score  bias    E-value  score  bias    exp  N  Sequence             Description
+    ------- ------ -----    ------- ------ -----   ---- --  --------             -----------
+  ------ inclusion threshold ------
+      0.046   18.6   0.5       0.14   17.1   0.5    1.9  1  sp|O62247|BLI5_CAEEL  Kunitz-type protein bli-5 OS=Caenorhabd
+
+
+Domain annotation for each sequence (and alignments):
+>> sp|O62247|BLI5_CAEEL  Kunitz-type protein bli-5 OS=Caenorhabditis elegans OX=6239 GN=bli-5 PE=1 SV=1
+   #    score  bias  c-Evalue  i-Evalue hmmfrom  hmm to    alifrom  ali to    envfrom  env to     acc
+ ---   ------ ----- --------- --------- ------- -------    ------- -------    ------- -------    ----
+   1 ?   17.1   0.5   2.4e-07      0.14       2      57 ..     131     185 ..     130     186 .. 0.89
+
+  Alignments for each domain:
+  == domain 1  score: 17.1 bits;  conditional E-value: 2.4e-07
+             seeds_MSA   2 rpdfcleppdtgpCrafisryyYnakakkCqeFvYGGcgg.nrNnFktaeeCrrtCa 57 
+                           r++ c  p  + p   ++sr+ ++   ++C eF ++  +   +NnFkt + C+++C 
+  sp|O62247|BLI5_CAEEL 131 RAKTCVHPIFDHPDDGYLSRWGFDG--EQCIEFKWNPERPsSANNFKTRAHCEDYCI 185
+                           6788999999999999999999996..69*******888789**************6 PP
+
+
+
+Internal pipeline statistics summary:
+-------------------------------------
+Query model(s):                            1  (58 nodes)
+Target sequences:                          1  (202 residues searched)
+Passed MSV filter:                         1  (1); expected 1.0 (1)
+Passed bias filter:                        1  (1); expected 1.0 (1)
+Passed Vit filter:                         1  (1); expected 1.0 (1)
+Passed Fwd filter:                         1  (1); expected 1.0 (1)
+Initial search space (Z):             569482  [as set by --Z on cmdline]
+Domain search space  (domZ):               1  [number of targets reported over threshold]
+# CPU time: 0.00u 0.00s 00:00:00.00 Elapsed: 00:00:00.00
+# Mc/sec: 5.78
+//
+[ok]
