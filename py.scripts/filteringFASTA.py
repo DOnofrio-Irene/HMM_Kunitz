@@ -1,3 +1,4 @@
+#!/usr/bin/python
 from sys import argv
 ''' Python script to remove from a multiFASTA file specific sequences based on their UniProt ID '''
 
