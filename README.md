@@ -133,18 +133,22 @@ To pick the optimal E-value, able to maximize the classification performance, ca
 4. Swap the role of the two subsets
 
 ```
+#optimization on subset1
 for i in `seq 1 12`
 do
 python3 performance.py subset1 1e-$i 
 done > optimization_results1.txt 
 
+#testing on subset2
 python performance.py subset2 <insert the best threshold on the other>
 
+#optimization on subset2
 for i in `seq 1 12`
 do
 python3 performance.py subset2 1e-$i 
 done > optimization_results2.txt 
 
+#testing on subset1
 python performance.py subset1 <insert the best threshold on the other>
 
 ```
@@ -156,3 +160,5 @@ python performance.py <(cat subset1 subset2) <insert the average of the best thr
 ```
 python graphs.py optimization_results1.txt optimization_results2.txt final_results.txt
 ```
+
+> In these performance measurements the Matthews correlation coefficient (MCC) was adopted to evaluate the efficacy of the model. Indeed, MCC > is a measure unaffected by the unbalanced datasets issue (Chicco and Jurman, 2020).
