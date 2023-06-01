@@ -48,7 +48,7 @@ The cluster was performed with a threshold of 95%
 cd-hit -i filtered_PDBnogrouping.fasta -o seeds.fasta -c 0.95 
 ```
 
-## MSA AND HMM GENERATION
+## 2. MSA AND HMM GENERATION
 ### Mulitple structure alignment
 The representative list was submitted to [PDBeFold v2.59](https://www.ebi.ac.uk/msd-srv/ssm/) alignment program to obtain a multiple structure alignment (Krissinel and Henrick, 2004). 
 To compile the list with the ```PDB ID``` + ```Auth Asym ID``` to upload on PDBeFold, it is necessary to extract the two fields from the tabular report. First we extract the entity IDs from the multi-FASTA, and then we retrieve the```PDB ID``` + ```Auth Asym ID``` pairs from the tabular report, using the ```extract_chainIDs_seeds.py```  :
@@ -62,7 +62,7 @@ The resulting seed MSA is provided as input to hmmbuild function of HMMER 3.3.2.
 hmmbuild kunitz.hmm seeds_MSA.seq
 ```
 
-## TEST SET GENERATION
+## 3. TEST SET GENERATION
 Download the entire UniProtKB/Swiss-Prot database, containing 569516 sequence entries (release 2023_02 of 03-May-2023), which will be the test set to validate the model. To ensure a fair evaluation of the HMM model, proteins sharing a high level of sequence identity with the representatives need to be excluded from the test set. Identification of redundant proteins was carried out using the blastpgp program (Altschul et al., 1997).
 ```
 makeblastdb -in uniprot_sprot.fasta -out $fasta_db -dbtype prot
@@ -89,3 +89,36 @@ Use the ``` rem_fasta_seqs.py ``` Python script to remove the redundant proteins
 python3 rem_fasta_seqs.py $ids_toremove uniprot_sprot.fasta swissprot_nonredundant.fasta
 
 ```
+
+## 4. MODEL TESTING
+To account for the influence of database size on the E-values, the ```hmmsearch``` command from the HMMER software was run
+against the entire test set, with the option ```‘--max’``` which excludes all the heuristic filters
+```
+hmmsearch --cpu 4 --max --noali --tblout hmmsearch_results kunitz.hmm swissprot_nonredundant.fasta
+```
+From the results we only need the identifiers and the correspective E-values, to extract these fields:
+```
+grep -v "^#" hmmsearch_results | awk -v OFS="\t" '$1=$1' | cut -f1 | cut -d '|' -f 2 > id_list
+grep -v "^#" hmmsearch_results| awk -v OFS="\t" '$1=$1' | cut -f5 > eval_list
+paste id_list eval_list > parsed_hmmsearch_results && rm id_list eval_list 
+```
+
+## 5. SUBSETS CREATION
+In order to validate the model, it is possible to create two equally sized subsets with an equal proportion of Kunitz and non-Kunitz proteins. To do so use the ```subsets-creation.py``` Python script. This script takes in input:
+- hmmsearch output results (```parsed_hmmsearch_results```)
+- file containing all the non-Kunitz proteins (```non_kunitz_ids.list```)
+- file containing all the Kunitz proteins without the redundant ones (```allkunitz_nonredun_IDs.list```)
+- 
+Each protein in the subsets is associated with its corresponding e-value (obtained with the hmmsearch program) and label (0 or 1 
+based on the absence or presence of the Kunitz domain, respectively). The labeling process and the reintroduction of those proteins which weren’t shown in the hmmsearch were performed by the Python script with a comparison between the results and the lists of Kunitz and non-Kunitz proteins.
+
+>   To retrieve the files contaning the non-Kunitz and the Kunitz proteins present in UniProtKB/Swiss-Prot use the Advance search in UniProt:
+  - Kunitz proteins: ```(reviewed:true) AND (xref:pfam-PF00014)``` => kunitz_ids.list
+  - non-Kunitz proteins:``` (reviewed:true) NOT (xref:pfam-PF00014)``` => non_kunitz_ids.list
+
+  Since the list of Kunitz proteins contains also the "redundant" ones, it is necessary to filter:
+  ```
+  grep -v -x -f toberemoved_seqs.list kunitz_ids.list > allkunitz_nonredun_IDs.list 
+  ```
+
+
