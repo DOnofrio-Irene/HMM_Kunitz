@@ -13,4 +13,7 @@ To run this pipeline the following programms need to be installed:
 + Refinement Resolution <= 2.50
 + Polymer Entity Sequence Lenght = 49-90
 
-The tabular report of the list of retrieved sequences was downloaded in CSV format.
+The tabular report of the list of retrieved sequences was downloaded in CSV format. This file was cleaned up using the following command:
+```
+tail -n +3 $PDBstructures | grep -v "^,," | tr -d \" > $PDBstructures.tmp && mv $PDBstructures.tmp $PDBstructures
+```
