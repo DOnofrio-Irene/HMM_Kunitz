@@ -18,6 +18,12 @@ The tabular report of the list of retrieved sequences was downloaded in CSV form
 ```
 tail -n +3 PDBnogrouping.csv | grep -v "^,," | tr -d \" > PDBnogrouping.tmp && mv PDBnogrouping.tmp PDBnogrouping
 ```
-To account for the redundancy of the PDB structures downloaded, it was necessary to perform a clustering procedure with CD-HIT. CD-HIT is  greedy incremental algorithm that starts with the longest input sequence as the first cluster representative and then processes the remaining sequences from long to short to classify each sequence as a redundant or representative sequence based on its similarities to the existing representatives. Since the command takes in input FASTA files, it was necessary to download the FASTA sequences of the entities downloaded from PDB. 
+To account for the redundancy of the PDB structures downloaded, it was necessary to perform a clustering procedure with CD-HIT. CD-HIT is  greedy incremental algorithm that starts with the longest input sequence as the first cluster representative and then processes the remaining sequences from long to short to classify each sequence as a redundant or representative sequence based on its similarities to the existing representatives. 
+Since the command takes in input FASTA files, it was necessary to download the FASTA sequences of the entities downloaded from PDB.
+- extract from the tabular report the PDB ID
+```
+cut -d "," -f 2 $PDBstructures  > FASTA_to_download.list
+```
+
 
 
