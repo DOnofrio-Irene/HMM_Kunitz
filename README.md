@@ -74,3 +74,9 @@ sort -k 3 -n -r  blastpgp_results.bl8 > tmp && mv tmp blastpgp_results.bl8
 awk '$3 >= 95.00' blastpgp_results.bl8 > morethan95%.bl8
 awk -F '|' '{print $3}' morethan95%.bl8 > redundant_seqs.list
 ```
+To check if all the representatives are detected by blastpgp, it is necessary to compare the list of the UniProt IDs of the representatives with the list of the redundant proteins found by blastpgp.
+1. Mapp the UniProt IDs of the representatives using the [ID Mapping tool](https://www.uniprot.org/id-mapping) provided by UniProt. Upload the list of the  ```PDB ID``` + ```Auth Asym ID``` pairs and mapp from PDB to UniProtKB/Swiss-Prot. Download the TSV file (mapped_IDs.tsv).
+2. Compare the two lists:
+``` comm <(sort redundant_seqs.list) <(sort  $ids_mapped)```
+3. Merge the unique results of the two lists together:
+``` sort -u mapped_IDs.tsv redundant_seqs.list > toberemoved_seqs.list```
