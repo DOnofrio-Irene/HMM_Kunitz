@@ -1,3 +1,4 @@
+#!/usr/bin/python
 from sys import argv
 import random
 ''' This Python script takes in input the results of hmmsearch program and gives as output two randomly splitted and equally sized subsets, in which each entries is associated with the corresponding E-value and the label (0,1)'''
