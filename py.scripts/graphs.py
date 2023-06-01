@@ -1,3 +1,5 @@
+#!/usr/bin/python
+""" python script to visualize the results of an optimization procedure for an HMM model"""
 import seaborn as sns
 import matplotlib.pyplot as plt
 from matplotlib.colors import LogNorm, Normalize
@@ -6,6 +8,7 @@ from sys import argv
 
 
 def MCCvsEvalue(data1, data2):
+    """ displays the relationship between MCC and Evalue; the input arguments are the results of an optimization procedure carried out on two subset"""
     evalues1 = data1['E-values']
     mcc1 = data1['mcc']
 
