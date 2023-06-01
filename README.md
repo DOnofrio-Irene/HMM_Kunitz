@@ -25,8 +25,8 @@ Select a representative training set of structurally defined proteins using the 
 tail -n +3 PDBnogrouping.csv | grep -v "^,," | tr -d \" > PDBnogrouping.tmp && mv PDBnogrouping.tmp PDBnogrouping
 ```
 > - ```tail -n +3```: to get rid of the headers
-> -```grep -v "^,,"```: to delete the lines starting with ```,,```
-> -```tr -d \" ```: to delete the quotation marks 
+> - ```grep -v "^,,"```: to delete the lines starting with ```,,```
+> - ```tr -d \" ```: to delete the quotation marks 
 
 
 To account for the redundancy of the PDB structures downloaded, it is necessary to perform a clustering procedure with CD-HIT. CD-HIT is  greedy incremental algorithm that starts with the longest input sequence as the first cluster representative and then processes the remaining sequences from long to short to classify each sequence as a redundant or representative sequence based on its similarities to the existing representatives (Fu et al., 2012).
