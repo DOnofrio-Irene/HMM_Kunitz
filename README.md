@@ -113,12 +113,12 @@ Each protein in the subsets is associated with its corresponding e-value (obtain
 based on the absence or presence of the Kunitz domain, respectively). The labeling process and the reintroduction of those proteins which weren’t shown in the hmmsearch were performed by the Python script with a comparison between the results and the lists of Kunitz and non-Kunitz proteins.
 
 >   To retrieve the files contaning the non-Kunitz and the Kunitz proteins present in UniProtKB/Swiss-Prot use the Advance search in UniProt:
-  - Kunitz proteins: ```(reviewed:true) AND (xref:pfam-PF00014)``` => kunitz_ids.list
-  - non-Kunitz proteins:``` (reviewed:true) NOT (xref:pfam-PF00014)``` => non_kunitz_ids.list
+>  - Kunitz proteins: ```(reviewed:true) AND (xref:pfam-PF00014)``` => kunitz_ids.list
+>  - non-Kunitz proteins:``` (reviewed:true) NOT (xref:pfam-PF00014)``` => non_kunitz_ids.list
 
-  Since the list of Kunitz proteins contains also the "redundant" ones, it is necessary to filter:
-  ```
-  grep -v -x -f toberemoved_seqs.list kunitz_ids.list > allkunitz_nonredun_IDs.list 
-  ```
+>  Since the list of Kunitz proteins contains also the "redundant" ones, it is necessary to filter:
+>  ```
+>  grep -v -x -f toberemoved_seqs.list kunitz_ids.list > allkunitz_nonredun_IDs.list 
+>  ```
 
 
