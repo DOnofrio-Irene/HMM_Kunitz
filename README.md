@@ -29,6 +29,7 @@ tail -n +3 PDBnogrouping.csv | grep -v "^,," | tr -d \" > PDBnogrouping.tmp && m
 > - ```tr -d \" ```: to delete the quotation marks 
 
 
+
 To account for the redundancy of the PDB structures downloaded, it is necessary to perform a clustering procedure with CD-HIT. CD-HIT is  greedy incremental algorithm that starts with the longest input sequence as the first cluster representative and then processes the remaining sequences from long to short to classify each sequence as a redundant or representative sequence based on its similarities to the existing representatives (Fu et al., 2012).
 
 ### FASTA sequences download
@@ -42,11 +43,11 @@ cut -d "," -f 2 PDBnogrouping.csv  > FASTA_to_download.list
 for i in  `cat FASTA_to_download.list`; do wget https://www.rcsb.org/fasta/entry/$i ; done 
 for i in `cat FASTA_to_download.list` ; do cat $i ; done > PDBnogrouping.fasta  
 ```
-In this multi-FASTA there are the sequences of the entire entities, thus it is necessary to extract only the sequences of the target chain IDs, that can be retrieved from the tabular report:
+In this multi-FASTA there are the sequences of the entire entities, thus it is necessary to extract only the sequences of the target chain IDs, which can be retrieved from the tabular report:
 ```
 cut -d "," -f 1 PDBnogrouping.csv > PDBchains_nogrouping.list 
 ```
-To filter the multi-FASTA and exclude the chain we are not interested in, run the ``` filteringFASTA.py ``` Python script that can be found inside this repository:
+To filter the multi-FASTA and exclude the chains we are not interested in, run the ``` filteringFASTA.py ``` Python script:
 ```
 python3 filteringFASTA.py PDBchains_nogrouping.list PDBnogrouping.fasta filtered_PDBnogrouping.fasta
 ```
@@ -72,7 +73,7 @@ hmmbuild kunitz.hmm seeds_MSA.seq
 ```
 
 ## 3. TEST SET GENERATION
-Download the entire UniProtKB/Swiss-Prot database, containing 569516 sequence entries (release 2023_02 of 03-May-2023), which will be the test set to validate the model. To ensure a fair evaluation of the HMM model, proteins sharing a high level of sequence identity with the representatives need to be excluded from the test set. Identification of redundant proteins was carried out using the blastpgp program (Altschul et al., 1997).
+Download the entire UniProtKB/Swiss-Prot database, containing 569516 sequence entries (release 2023_02 of 03-May-2023), which will be the test set to validate the model. To ensure a fair evaluation of the HMM model, proteins sharing a high level of sequence identity with the representatives need to be excluded from the test set. Identification of redundant proteins is carried out using the blastpgp program (Altschul et al., 1997).
 ```
 makeblastdb -in uniprot_sprot.fasta -out $fasta_db -dbtype prot
 blastpgp -i seeds.fasta -d uniprot_sprot.fasta -m 8 -o blastpgp_results.bl8
