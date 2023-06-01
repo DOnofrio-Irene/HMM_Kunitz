@@ -9,7 +9,7 @@ To run this pipeline the following programms need to be installed:
 
 ## 1. SELECTION OF THE TRAINING SET
 ### Advanced search on PDB DATABASE
-The selection of a representative training set of structurally defined proteins was carried out by means of an advanced search in the RCSB PDB database (wwPDB consortium, 2019). The constraints used were: 
+The selection of a representative training set of structurally defined proteins was carried out by means of an advanced search in the [RCSB PDB database](https://www.rcsb.org/) (wwPDB consortium, 2019). The constraints used were: 
 + Identifier - Pfam Protein Family = PF00014
 + Refinement Resolution <= 2.50
 + Polymer Entity Sequence Lenght =  49-90 
@@ -84,6 +84,7 @@ To check if all the representatives are detected by blastpgp, it is necessary to
  ``` 
  sort -u mapped_IDs.tsv redundant_seqs.list > toberemoved_seqs.list
  ```
+ 
 Use the ``` rem_fasta_seqs.py ``` Python script to remove the redundant proteins from the test set:
 ```
 python3 rem_fasta_seqs.py $ids_toremove uniprot_sprot.fasta swissprot_nonredundant.fasta
@@ -116,7 +117,7 @@ python subsets-creation.py parsed_hmmsearch_results allkunitz_nonredun_IDs.list 
 Each protein in the subsets is associated with its corresponding e-value (obtained with the hmmsearch program) and label (0 or 1 
 based on the absence or presence of the Kunitz domain, respectively). The labeling process and the reintroduction of those proteins (with a fictional e-value) which weren’t shown in the hmmsearch were performed by the Python script with a comparison between the results and the lists of Kunitz and non-Kunitz proteins.
 
->   To retrieve the files contaning the non-Kunitz and the Kunitz proteins present in UniProtKB/Swiss-Prot use the Advance search in UniProt:
+>   To retrieve the files contaning the non-Kunitz and the Kunitz proteins present in UniProtKB/Swiss-Prot use the Advance search in [UniProt](https://www.uniprot.org/):
 >  - Kunitz proteins: ```(reviewed:true) AND (xref:pfam-PF00014)``` => kunitz_ids.list
 >  - non-Kunitz proteins:``` (reviewed:true) NOT (xref:pfam-PF00014)``` => non_kunitz_ids.list
 >  Since the list of Kunitz proteins contains also the "redundant" ones, it is necessary to filter:
