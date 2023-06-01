@@ -8,10 +8,10 @@ To run this pipeline the following programms need to be installed:
 
 ## 1. SELECTION OF THE TRAINING SET
 ### Advanced search on PDB DATABASE
-
+The selection of a representative training set of structurally defined proteins was carried out by means of an advanced search in the RCSB PDB database. The constraints used were: 
 + Identifier - Pfam Protein Family = PF00014
 + Refinement Resolution <= 2.50
-+ Polymer Entity Sequence Lenght = 49-90
++ Polymer Entity Sequence Lenght = ``` 49-90 ```
 
 The tabular report of the list of retrieved sequences was downloaded in CSV format. This file was cleaned up using the following command:
 ```
