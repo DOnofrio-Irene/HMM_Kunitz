@@ -71,7 +71,7 @@ The resulting seed MSA is provided as input to hmmbuild function of HMMER 3.3.2.
 ```
 hmmbuild kunitz.hmm seeds_MSA.seq
 ```
-Visualize the profile HMM logo uploading the model on [Skyling](http://skylign.org/)
+Visualize the profile HMM logo uploading the model on [Skylign](http://skylign.org/)
 ## 3. TEST SET GENERATION
 Download the entire UniProtKB/Swiss-Prot database, containing 569516 sequence entries (release 2023_02 of 03-May-2023), which will be the test set to validate the model. To ensure a fair evaluation of the HMM model, proteins sharing a high level of sequence identity with the representatives need to be excluded from the test set. Identification of redundant proteins is carried out using the blastpgp program (Altschul et al., 1997).
 ```
