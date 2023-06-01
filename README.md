@@ -18,15 +18,24 @@ The tabular report of the list of retrieved sequences was downloaded in CSV form
 ```
 tail -n +3 PDBnogrouping.csv | grep -v "^,," | tr -d \" > PDBnogrouping.tmp && mv PDBnogrouping.tmp PDBnogrouping
 ```
-To account for the redundancy of the PDB structures downloaded, it was necessary to perform a clustering procedure with CD-HIT. CD-HIT is  greedy incremental algorithm that starts with the longest input sequence as the first cluster representative and then processes the remaining sequences from long to short to classify each sequence as a redundant or representative sequence based on its similarities to the existing representatives. 
-Since the command takes in input FASTA files, it was necessary to download the FASTA sequences of the entities downloaded from PDB.
+
+### FASTA sequences download
+To account for the redundancy of the PDB structures downloaded, it is necessary to perform a clustering procedure with CD-HIT. CD-HIT is  greedy incremental algorithm that starts with the longest input sequence as the first cluster representative and then processes the remaining sequences from long to short to classify each sequence as a redundant or representative sequence based on its similarities to the existing representatives. 
+Since the command takes in input FASTA files, FASTA sequences of the entities fetched from PDB need to be downloaded:
 - extract from the tabular report the PDB ID
 ```
 cut -d "," -f 2 PDBnogrouping.csv  > FASTA_to_download.list
 ```
-Using ```wget``` download the FASTA file, looping on the list previosuly computed:
+- Using ```wget``` download the FASTA files, looping on the list previosuly computed and redirect all the sequences in a unique multi-FASTA file
  ```
-for i in  `cat ../FASTA_to_download.list`; do wget https://www.rcsb.org/fasta/entry/$i ; done 
-for i in `cat ../FASTA_to_download.list` ; do cat $i ; done > ../PDBnogrouping.fasta  
+for i in  `cat FASTA_to_download.list`; do wget https://www.rcsb.org/fasta/entry/$i ; done 
+for i in `cat FASTA_to_download.list` ; do cat $i ; done > PDBnogrouping.fasta  
 ```
-
+In this multi-FASTA there are the sequences of the entire entities, thus it is necessary to extract only the sequences of the target chain IDs, that can be retrieved from the tabular report:
+```
+cut -d "," -f 1 PDBnogrouping.csv > PDBchains_nogrouping.list 
+```
+To filter the multi-FASTA and exclude the chain we are not interested in, run the ``` filteringFASTA.py ``` Python script that can be found inside this repository:
+```
+python3 filteringFASTA.py PDBchains_nogrouping.list PDBnogrouping.fasta filtered_PDBnogrouping.fasta
+```
