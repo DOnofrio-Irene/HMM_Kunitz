@@ -13,16 +13,21 @@ conda create -n hmm_kunitz blast-legacy hmmer cd-hit
 
 ## 1. SELECTION OF THE TRAINING SET
 ### Advanced search on PDB DATABASE
-The selection of a representative training set of structurally defined proteins was carried out by means of an advanced search in the [RCSB PDB database](https://www.rcsb.org/) (wwPDB consortium, 2019). The constraints used were: 
+Select a representative training set of structurally defined proteins using the advanced search in the [RCSB PDB database](https://www.rcsb.org/) (wwPDB consortium, 2019). The constraints used in this project are: 
 + Identifier - Pfam Protein Family = PF00014
 + Refinement Resolution <= 2.50
 + Polymer Entity Sequence Lenght =  49-90 
 
-A tabular report was customized with the following field: ```PDB ID``` and ```Auth Asym ID```.
-The tabular report of the list of retrieved sequences was downloaded in CSV format. This file was cleaned up using the following command:
+- Customize a tabular report with the following field: ```PDB ID``` and ```Auth Asym ID```.
+- Download the tabular report of the list of retrieved sequences  in CSV format. 
+- Reformat this file using the following command:
 ```
 tail -n +3 PDBnogrouping.csv | grep -v "^,," | tr -d \" > PDBnogrouping.tmp && mv PDBnogrouping.tmp PDBnogrouping
 ```
+> - ```tail -n +3```: to get rid of the headers
+> -```grep -v "^,,"```: to delete the lines starting with ```,,```
+> -```tr -d \" ```: to delete the quotation marks 
+
 
 To account for the redundancy of the PDB structures downloaded, it is necessary to perform a clustering procedure with CD-HIT. CD-HIT is  greedy incremental algorithm that starts with the longest input sequence as the first cluster representative and then processes the remaining sequences from long to short to classify each sequence as a redundant or representative sequence based on its similarities to the existing representatives (Fu et al., 2012).
 
