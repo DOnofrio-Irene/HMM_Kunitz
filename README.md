@@ -56,3 +56,11 @@ To compile the list with the ```PDB ID``` + ```Auth Asym ID``` to upload on PDBe
 grep '^>' seeds.fasta | cut -d "|" -f1 | cut -c2- > entityIDs_seeds.list
 python extract_chainIDs_seeds.py entityIDs_seeds.list PDBnogrouping.csv training_seqs.list
 ```
+### HMM generation
+The resulting seed MSA is provided as input to hmmbuild function of HMMER 3.3.2. to obtain a profile-HMM (Finn et al., 2011)
+```
+hmmbuild kunitz.hmm seeds_MSA.seq
+```
+
+## TEST SET GENERATION
+
