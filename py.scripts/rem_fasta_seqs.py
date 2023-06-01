@@ -1,3 +1,4 @@
+#!/usr/bin/python
 from sys import argv
 
 def get_training_list(training_IDs):
