@@ -108,17 +108,51 @@ In order to validate the model, it is possible to create two equally sized subse
 - hmmsearch output results (```parsed_hmmsearch_results```)
 - file containing all the non-Kunitz proteins (```non_kunitz_ids.list```)
 - file containing all the Kunitz proteins without the redundant ones (```allkunitz_nonredun_IDs.list```)
-- 
+
+```
+python subsets-creation.py parsed_hmmsearch_results allkunitz_nonredun_IDs.list non_kunitz_ids.list subset1 subset2 
+```
+
 Each protein in the subsets is associated with its corresponding e-value (obtained with the hmmsearch program) and label (0 or 1 
-based on the absence or presence of the Kunitz domain, respectively). The labeling process and the reintroduction of those proteins which weren’t shown in the hmmsearch were performed by the Python script with a comparison between the results and the lists of Kunitz and non-Kunitz proteins.
+based on the absence or presence of the Kunitz domain, respectively). The labeling process and the reintroduction of those proteins (with a fictional e-value) which weren’t shown in the hmmsearch were performed by the Python script with a comparison between the results and the lists of Kunitz and non-Kunitz proteins.
 
 >   To retrieve the files contaning the non-Kunitz and the Kunitz proteins present in UniProtKB/Swiss-Prot use the Advance search in UniProt:
 >  - Kunitz proteins: ```(reviewed:true) AND (xref:pfam-PF00014)``` => kunitz_ids.list
 >  - non-Kunitz proteins:``` (reviewed:true) NOT (xref:pfam-PF00014)``` => non_kunitz_ids.list
-
 >  Since the list of Kunitz proteins contains also the "redundant" ones, it is necessary to filter:
 >  ```
 >  grep -v -x -f toberemoved_seqs.list kunitz_ids.list > allkunitz_nonredun_IDs.list 
 >  ```
 
+## 6. E-VALUE OPTIMIZATION AND PERFORMANCE MEASUREMENT
+To pick the optimal E-value, able to maximize the classification performance, carry out an optimization procedure on the two subsets derived from the random splitting of the whole test set. To do so use the ```performace.py``` Python script.
 
+1. Loop for a range of E-values the script on the first subset
+2. Pick the threshold that maximizes the MCC (Matthew's correlation coefficient)
+3. Test it on the second subset
+4. Swap the role of the two subsets
+
+```
+for i in `seq 1 12`
+do
+python3 performance.py subset1 1e-$i 
+done > optimization_results1.txt 
+
+python performance.py subset2 <insert the best threshold on the other>
+
+for i in `seq 1 12`
+do
+python3 performance.py subset2 1e-$i 
+done > optimization_results2.txt 
+
+python performance.py subset1 <insert the best threshold on the other>
+
+```
+5. Test the model on the entire validation test using the average of the two best thresholds:
+```
+python performance.py <(cat subset1 subset2) <insert the average of the best thresholds of the optimizations> > final_results.txt
+```
+6. Visualize the results of the optimization and the performance using the ```graphs.py``` Python script
+```
+python graphs.py optimization_results1.txt optimization_results2.txt final_results.txt
+```
