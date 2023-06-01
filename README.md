@@ -22,8 +22,11 @@ To account for the redundancy of the PDB structures downloaded, it was necessary
 Since the command takes in input FASTA files, it was necessary to download the FASTA sequences of the entities downloaded from PDB.
 - extract from the tabular report the PDB ID
 ```
-cut -d "," -f 2 $PDBstructures  > FASTA_to_download.list
+cut -d "," -f 2 PDBnogrouping.csv  > FASTA_to_download.list
 ```
-
-
+Using ```wget``` download the FASTA file, looping on the list previosuly computed:
+ ```
+for i in  `cat ../FASTA_to_download.list`; do wget https://www.rcsb.org/fasta/entry/$i ; done 
+for i in `cat ../FASTA_to_download.list` ; do cat $i ; done > ../PDBnogrouping.fasta  
+```
 
