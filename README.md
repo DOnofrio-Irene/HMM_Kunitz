@@ -1,6 +1,6 @@
 # Kunitz_HMM_prj
 Laboratory of Bioinformatics project aiming at the generation of an HMM model for the annotation of the Kunitz domain. 
-In this repository there are all the datasets, python scripts and the entire pipeline. The steps of the entire pipeline can be found inside the knz_prj.sh file.
+In this repository there are all the datasets, python scripts and the entire pipeline. The steps of the entire pipeline can also be found inside the knz_prj.sh file.
 To run this pipeline the following programms need to be installed:
 - HMMER  3.3.2
 - CD-HIT (version 4.8.1)
@@ -63,4 +63,14 @@ hmmbuild kunitz.hmm seeds_MSA.seq
 ```
 
 ## TEST SET GENERATION
-
+Download the entire UniProtKB/Swiss-Prot database, containing 569516 sequence entries (release 2023_02 of 03-May-2023), which will be the test set to validate the model. To ensure a fair evaluation of the HMM model, proteins sharing a high level of sequence identity with the representatives need to be excluded from the test set. Identification of redundant proteins was carried out using the blastpgp program (Altschul et al., 1997).
+```
+makeblastdb -in uniprot_sprot.fasta -out $fasta_db -dbtype prot
+blastpgp -i seeds.fasta -d uniprot_sprot.fasta -m 8 -o blastpgp_results.bl8
+```
+The output file is ranked based on the sequence identity value, and only the sequences that showed a S.I > 95% are selected and their UniProt IDs are copied into a new file.
+```
+sort -k 3 -n -r  blastpgp_results.bl8 > tmp && mv tmp blastpgp_results.bl8
+awk '$3 >= 95.00' blastpgp_results.bl8 > morethan95%.bl8
+awk -F '|' '{print $3}' morethan95%.bl8 > redundant_seqs.list
+```
