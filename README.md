@@ -6,6 +6,10 @@ To run this pipeline the following programms need to be installed:
 - CD-HIT (version 4.8.1)
 - BLAST+
 
+```
+conda create -n hmm_kunitz blast-legacy hmmer cd-hit 
+```
+
 
 ## 1. SELECTION OF THE TRAINING SET
 ### Advanced search on PDB DATABASE
